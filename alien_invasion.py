@@ -1,7 +1,9 @@
 import sys
 
 import pygame
+
 from settings import Settings
+from ship import Ship
 
 
 class AlienIncasion:
@@ -11,14 +13,15 @@ class AlienIncasion:
         #初始化游戏并创建资源
         pygame.init()
         self.clock = pygame.time.Clock()
+        #引入settings
+        self.settings = Settings()
         self.screen = pygame.display.set_mode((
-            self.settings.screen_width,
-            self.settings.screen_height
+           self.settings.screen_width,
+           self.settings.screen_height
         ))
         pygame.display.set_caption("Alien Invasion")
+        self.ship = Ship(self)
 
-        #设置背景色
-        self.bg_color = (230, 230, 230)
 
     def run_game(self):
         #开始游戏的住循环
@@ -31,7 +34,8 @@ class AlienIncasion:
                     sys.exit()
 
             #每次循环都重绘屏幕
-            self.screen.fill(self.bg_color)
+            self.screen.fill(self.settings.bg_color)
+            self.ship.blitme()
 
             #让最近绘制的屏幕可见
             pygame.display.flip()
