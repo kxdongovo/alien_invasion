@@ -71,6 +71,7 @@ class AlienIncasion:
             #重置游戏统计信息
             self.stats.reset_stats()
             self.sb.prep_score()
+            self.sb.prep_level()
             self.game_active = True
             #清空外星人和子弹
             self.bullets.empty()
@@ -132,6 +133,9 @@ class AlienIncasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            #提高等级
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _update_aliens(self):
         #更新外星人位置
