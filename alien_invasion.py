@@ -5,6 +5,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from button import  Button
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
@@ -29,8 +30,10 @@ class AlienIncasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        #游戏启动后处于活动状态
-        self.game_active = True
+        #游戏活动状态
+        self.game_active = False
+        #创建按钮
+        self.play_button = Button(self, "Play")
 
 
     def run_game(self):
@@ -53,6 +56,28 @@ class AlienIncasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
+
+    def _check_play_button(self, mouse_pos):
+        #单击按钮开始新游戏
+        button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        if button_clicked and not self.game_active:
+            #还原游戏设置
+            self.settings.initialize_dynamic_settings()
+            #重置游戏统计信息
+            self.stats.reset_stats()
+            self.game_active = True
+            #清空外星人和子弹
+            self.bullets.empty()
+            self.aliens.empty()
+            #创建一个新的
+            self._create_fleet()
+            self.ship.center_ship()
+            #隐藏光标
+            pygame.mouse.set_visible(False)
+
 
     def _check_keydown_events(self, event):
          #响应按下
@@ -98,6 +123,7 @@ class AlienIncasion:
             # 删除子弹创建新外星人
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _update_aliens(self):
         #更新外星人位置
@@ -118,6 +144,9 @@ class AlienIncasion:
             bullet.draw_bullet()
         self.ship.blitme()
         self.aliens.draw(self.screen)
+        #如果游戏处于非活动状态就创建按钮
+        if not self.game_active:
+            self.play_button.draw_button()
         pygame.display.flip()
 
     def _create_fleet(self):
@@ -168,6 +197,7 @@ class AlienIncasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
 
 
     def _check_aliens_bottom(self):
