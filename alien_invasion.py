@@ -72,6 +72,7 @@ class AlienIncasion:
             self.stats.reset_stats()
             self.sb.prep_score()
             self.sb.prep_level()
+            self.sb.prep_ships()
             self.game_active = True
             #清空外星人和子弹
             self.bullets.empty()
@@ -201,6 +202,7 @@ class AlienIncasion:
         #响应飞船和外星人碰撞
         if self.stats.ships_left > 0:
             self.stats.ships_left -= 1
+            self.sb.prep_ships()
             #清空外星人和子弹列表
             self.bullets.empty()
             self.aliens.empty()
