@@ -9,6 +9,7 @@ class Settings:
         self.bg_color = (173, 216, 230)
         #飞船设置
         self.ship_speed = 5.5
+        self.ship_limit = 3
         #子弹设置
         self.bullet_speed = 8.0
         self.bullet_width = 3
